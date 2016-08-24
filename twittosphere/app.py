@@ -41,7 +41,7 @@ class TwittosphereApp(object):
         user = self.configs.get('database', 'user')
         password = self.configs.get('database', 'password')
         host = self.configs.get('database', 'host')
-        dbname = self.configs.get('datbase', 'database')
+        dbname = self.configs.get('database', 'database')
         conn = SimpleDatabaseConnection(user=user, password=password,
                                         host=host, dbname=dbname)
         return conn.get_session()
