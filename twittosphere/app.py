@@ -39,7 +39,8 @@ class TwittosphereApp(object):
         :return: html rendering of view.
         :rtype: String
         """
-        return "Hello World"
+        template = self._env.get_template('base.html')
+        return template.render()
 
     #----------------------------------------------
     # Private functions

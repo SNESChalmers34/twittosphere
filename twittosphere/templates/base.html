@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Block for extra css includes -->
+    <link href="/static/css/base.css" rel="stylesheet">
+    {% block extra_css %}
+    {% endblock %}
+    <!-- Bootstrap -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- DataTables -->
+    <link rel="stylesheet" type="text/css" href="/static/DataTables/datatables.min.css"/>
+  </head>
+  <body>
+    <!-- Javascript includes here -->
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/DataTables/datatables.min.js"></script>
+    <!-- Extra javascript includes here -->
+    {% block extra_js %}
+    {% endblock %}
+    <!-- Navigation bar -->
+    <div class="container">
+        <nav class="navbar navbar-dark bg-inverse">
+            <a class="navbar-brand" href="#">Twittosphere</a>
+            <ul class="nav navbar-nav">
+                <li class="nav-item"><a href="#">HOME</a></li>
+                <li class="nav-item"><a href="#">Projects</a></li>
+                <li class="nav-item"><a href="#">Searches</a></li>
+            </ul>
+        </nav>
+    </div>
+    <!-- Content block -->
+    {% block content %}
+    {% endblock %}
+    <!-- Footer -->
+  </body>
+</html>
