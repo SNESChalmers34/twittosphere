@@ -5,6 +5,7 @@ except ImportError:
 import os
 
 from twittosphere.db import SimpleDatabaseConnection
+from twittosphere.views import Tweet
 
 import cherrypy
 from jinja2 import Environment, PackageLoader
@@ -20,13 +21,12 @@ class TwittosphereApp(object):
             loader=PackageLoader(
             'twittosphere', 'templates')
         )
-        # Add views here!!!
-
+        # Add class-based views here!!!
+        self.tweets = Tweet(self._appdir, self._configs,
+                            self._db, self._env)
 
     # ---------------------------------------------
     # Put your root views here.
-    # i.e. Everything exposed to the outside world not handled by an
-    # outside class.
     # ---------------------------------------------
     @cherrypy.expose
     def index(self):
@@ -47,10 +47,10 @@ class TwittosphereApp(object):
         Get a database session.
         :return: Database Session.
         """
-        user = self.configs.get('database', 'user')
-        password = self.configs.get('database', 'password')
-        host = self.configs.get('database', 'host')
-        dbname = self.configs.get('database', 'database')
+        user = self._configs.get('database', 'user')
+        password = self._configs.get('database', 'password')
+        host = self._configs.get('database', 'host')
+        dbname = self._configs.get('database', 'database')
         conn = SimpleDatabaseConnection(user=user, password=password,
                                         host=host, dbname=dbname)
         return conn
@@ -64,6 +64,6 @@ class TwittosphereApp(object):
         :rtype: ConfigParser
         """
         parser = ConfigParser()
-        cfg_file = os.path.join(self.appdir, 'config.cfg')
+        cfg_file = os.path.join(self._appdir, 'config.cfg')
         parser.read(cfg_file)
         return parser
