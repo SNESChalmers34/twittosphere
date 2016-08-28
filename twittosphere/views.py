@@ -19,6 +19,13 @@ class GenericView(object):
         return NotImplementedError()
 
     @cherrypy.popargs('obj_id')
+    def modify(self, obj_id, csrf_token, **kwargs):
+        """
+        Generic view to modify an object.
+        """
+        return NotImplementedError()
+
+    @cherrypy.popargs('obj_id')
     def delete(self, obj_id, csrf_token):
         """
         Generic view to delete an object.
@@ -68,5 +75,5 @@ class ProjectView(GenericView):
     pass
 
 
-class Setting(GenericView):
+class SettingView(GenericView):
     pass
