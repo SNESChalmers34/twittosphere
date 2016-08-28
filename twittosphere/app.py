@@ -5,7 +5,7 @@ except ImportError:
 import os
 
 from twittosphere.db import SimpleDatabaseConnection
-from twittosphere.views import Tweet
+from twittosphere.views import TweetView, ProjectView
 
 import cherrypy
 from jinja2 import Environment, PackageLoader
@@ -22,8 +22,10 @@ class TwittosphereApp(object):
             'twittosphere', 'templates')
         )
         # Add class-based views here!!!
-        self.tweets = Tweet(self._appdir, self._configs,
-                            self._db, self._env)
+        self.tweets = TweetView(self._appdir, self._configs,
+                                self._db, self._env)
+        self.projects = ProjectView(self._appdir, self._configs,
+                                    self._db, self._env)
 
     # ---------------------------------------------
     # Put your root views here.

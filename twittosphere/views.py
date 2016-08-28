@@ -39,7 +39,7 @@ class GenericView(object):
 
 
 @cherrypy.popargs('tweet_id')
-class Tweet(GenericView):
+class TweetView(GenericView):
     """
     Views for Tweets.
 
@@ -64,7 +64,7 @@ class Tweet(GenericView):
 
 
 @cherrypy.popargs('project_id')
-class Project(GenericView):
+class ProjectView(GenericView):
     pass
 
 
