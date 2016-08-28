@@ -7,6 +7,7 @@ import os
 from twittosphere.db import SimpleDatabaseConnection
 
 import cherrypy
+from jinja2 import Environment, PackageLoader
 
 
 class TwittosphereApp(object):
@@ -14,7 +15,10 @@ class TwittosphereApp(object):
         self.appdir = os.path.realpath(os.path.dirname(__file__))
         self.configs = self._get_configs()
         self.db = self._get_db_conn()
-
+        self.env = Environment(
+            loader=PackageLoader(
+            'twittosphere', 'templates')
+        )
     # ---------------------------------------------
     # Put your views here.
     # i.e. Everything exposed to the outside world.
@@ -44,7 +48,7 @@ class TwittosphereApp(object):
         dbname = self.configs.get('database', 'database')
         conn = SimpleDatabaseConnection(user=user, password=password,
                                         host=host, dbname=dbname)
-        return conn.get_session()
+        return conn
 
 
     def _get_configs(self):
