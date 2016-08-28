@@ -12,16 +12,21 @@ from jinja2 import Environment, PackageLoader
 
 class TwittosphereApp(object):
     def __init__(self):
-        self.appdir = os.path.realpath(os.path.dirname(__file__))
-        self.configs = self._get_configs()
-        self.db = self._get_db_conn()
-        self.env = Environment(
+        # Base Configs
+        self._appdir = os.path.realpath(os.path.dirname(__file__))
+        self._configs = self._get_configs()
+        self._db = self._get_db_conn()
+        self._env = Environment(
             loader=PackageLoader(
             'twittosphere', 'templates')
         )
+        # Add views here!!!
+
+
     # ---------------------------------------------
-    # Put your views here.
-    # i.e. Everything exposed to the outside world.
+    # Put your root views here.
+    # i.e. Everything exposed to the outside world not handled by an
+    # outside class.
     # ---------------------------------------------
     @cherrypy.expose
     def index(self):
