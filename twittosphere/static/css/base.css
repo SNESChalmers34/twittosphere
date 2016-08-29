@@ -8,3 +8,11 @@
 .nav.navbar-nav li a {
     color: #b8b894;
 }
+
+.add-label {
+    padding-left: 20px;
+}
+
+.add-form {
+    padding-top: 20px;
+}

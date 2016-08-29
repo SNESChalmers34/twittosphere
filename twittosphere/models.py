@@ -34,16 +34,12 @@ class APIType(Base):
     name = Column(Unicode(50))
 
 
-class Search(Base):
-    __tablename__ = 'searches'
+class SearchGeolocation(Base):
+    __tablename__ = 'search_geo'
     id = Column(Integer, primary_key=True)
-    name = Column(Unicode(50))
-    description = Column(UnicodeText)
-    date_created = Column(DateTime)
-    project_id = Column(Integer, ForeignKey('projects.id'))
-    geolocations = relationship(SearchGeolocation)
-    search_queries = relationship(SearchQuery)
-    active = Column(Boolean)
+    lattitude = Column(Float)
+    longitude = Column(Float)
+    search_id = Column(Integer, ForeignKey('searches.id'))
 
 
 class SearchQuery(Base):
@@ -54,9 +50,13 @@ class SearchQuery(Base):
     search_id = Column(Integer, ForeignKey('searches.id'))
 
 
-class SearchGeolocation(Base):
-    __tablename__ = 'search_geo'
+class Search(Base):
+    __tablename__ = 'searches'
     id = Column(Integer, primary_key=True)
-    lattitude = Column(Float)
-    longitude = Column(Float)
-    search_id = Column(Integer, ForeignKey('searches.id'))
+    name = Column(Unicode(50))
+    description = Column(UnicodeText)
+    date_created = Column(DateTime)
+    project_id = Column(Integer, ForeignKey('projects.id'))
+    geolocations = relationship(SearchGeolocation)
+    search_queries = relationship(SearchQuery)
+    active = Column(Boolean)

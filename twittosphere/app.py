@@ -3,9 +3,11 @@ try:
 except ImportError:
     from configparser import ConfigParser
 import os
+import uuid
 
 from twittosphere.db import SimpleDatabaseConnection
 from twittosphere.views import TweetView, ProjectView
+from twittosphere.models import Project
 
 import cherrypy
 from jinja2 import Environment, PackageLoader
@@ -39,8 +41,19 @@ class TwittosphereApp(object):
         :return: html rendering of view.
         :rtype: String
         """
-        template = self._env.get_template('base.html')
-        return template.render()
+        # Set a csrf token for the user
+        csrf_token = cherrypy.session.get('csrf_token')
+        if not csrf_token:
+            csrf_token = str(uuid.uuid4())
+            cherrypy.session['csrf_token'] = csrf_token
+        # Get db session
+        session = self._db.get_session()
+        projects = session.query(Project).all()
+        session.close()
+        # Render template
+        template = self._env.get_template('index.html')
+        return template.render(projects=projects,
+                               csrf_token=csrf_token)
 
     #----------------------------------------------
     # Private functions

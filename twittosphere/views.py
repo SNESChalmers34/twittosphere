@@ -1,5 +1,7 @@
 import cherrypy
 
+from twittosphere.models import Project
+
 
 class GenericView(object):
     """
@@ -12,25 +14,6 @@ class GenericView(object):
         self._db = db
         self._env = env
 
-    def create(self, csrf_token, **kwargs):
-        """
-        Generic view to create an object.
-        """
-        return NotImplementedError()
-
-    @cherrypy.popargs('obj_id')
-    def modify(self, obj_id, csrf_token, **kwargs):
-        """
-        Generic view to modify an object.
-        """
-        return NotImplementedError()
-
-    @cherrypy.popargs('obj_id')
-    def delete(self, obj_id, csrf_token):
-        """
-        Generic view to delete an object.
-        """
-        return NotImplementedError()
 
     def _list_view(self):
         """
@@ -43,6 +26,12 @@ class GenericView(object):
         Detail view of a single object.
         """
         return NotImplementedError()
+
+    def _check_csrf(self, csrf_token):
+        if str(cherrypy.session.get('csrf_token')) != csrf_token:
+            msg = 'CSRF Token Invalid'
+            raise cherrypy.HTTPError(status=400, message=msg)
+
 
 
 @cherrypy.popargs('tweet_id')
@@ -72,7 +61,16 @@ class TweetView(GenericView):
 
 @cherrypy.popargs('project_id')
 class ProjectView(GenericView):
-    pass
+
+    @cherrypy.expose
+    def create(self, csrf_token, name, description):
+        self._check_csrf(csrf_token)
+        session = self._db.get_session()
+        project = Project(name=name, description=description)
+        session.add(project)
+        session.commit()
+        session.close()
+        return "Success"
 
 
 class SettingView(GenericView):

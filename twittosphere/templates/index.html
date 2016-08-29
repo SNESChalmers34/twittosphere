@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}Welcome to Twittosphere{% endblock %}
+{% block content %}
+    <div class="container">
+        <h3>Projects</h3>
+        <!-- Table with a list of projects -->
+        <table id="projects-table" class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project in projects %}
+                <tr>
+                    <th scope="row">
+                        <a href="/projects/{{ project.id }}">{{  project.name }}</a>
+                    </th>
+                    <td>{{ project.description }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-md-6">
+                <button id="new-btn" class="btn add-btn btn-primary">+</button>
+                <label for="new-btn" class="add-label">Add Project</label>
+            </div>
+        </div>
+        <!-- Form for creating a new project -->
+        <div id="new-project-div" class="add-form hidden">
+            <form id="new-project-form">
+                <div class="form-group row">
+                    <div class="col-md-1">
+                        <label for="name">Name</label>
+                    </div>
+                    <div class="col-md-6">
+                        <input id="name" class="form-control" name="name" type="text">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-1">
+                        <label for="description">Description</label>
+                    </div>
+                    <div class="col-md-10">
+                        <textarea id="description" class="form-control" name="description" rows="5"></textarea>
+                    </div>
+                </div>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <div class="form-group row">
+                    <div class="col-md-2">
+                        <button id="submit-btn" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#new-btn').click(function() {
+                $('#new-project-div').toggleClass('hidden');
+                if ( $('#new-btn').text() === '+') {
+                    $('#new-btn').text('-');
+                } else {
+                    $('#new-btn').text('+');
+                }
+            });
+            $('#submit-btn').click(function() {
+                $('#new-project-form').submit(function(event) {
+                    event.preventDefault();
+                    var formData = $('#new-project-form').serialize();
+                    $.post({
+                        url: '/projects/create',
+                        data: formData,
+                        success: function() {
+                            location.reload();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+{% endblock %}
