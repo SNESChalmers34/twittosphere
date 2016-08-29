@@ -2,6 +2,7 @@ try:
     from ConfigParser import ConfigParser
 except ImportError:
     from configparser import ConfigParser
+import logging
 import os
 import uuid
 
@@ -21,13 +22,14 @@ class TwittosphereApp(object):
         self._db = self._get_db_conn()
         self._env = Environment(
             loader=PackageLoader(
-            'twittosphere', 'templates')
+                'twittosphere', 'templates')
         )
+        self._log = self._get_logger()
         # Add class-based views here!!!
         self.tweets = TweetView(self._appdir, self._configs,
-                                self._db, self._env)
+                                self._db, self._env, self._log)
         self.projects = ProjectView(self._appdir, self._configs,
-                                    self._db, self._env)
+                                    self._db, self._env, self._log)
 
     # ---------------------------------------------
     # Put your root views here.
@@ -48,16 +50,32 @@ class TwittosphereApp(object):
             cherrypy.session['csrf_token'] = csrf_token
         # Get db session
         session = self._db.get_session()
-        projects = session.query(Project).all()
-        session.close()
+        try:
+            projects = session.query(Project).all()
+        except Exception as e:
+            self._log.exception(e)
+            raise cherrypy.HTTPError(500)
+        finally:
+            session.close()
         # Render template
         template = self._env.get_template('index.html')
         return template.render(projects=projects,
                                csrf_token=csrf_token)
 
-    #----------------------------------------------
+    # ----------------------------------------------
     # Private functions
     # ---------------------------------------------
+    def _get_logger(self):
+        """
+        Get the default logger.
+
+        :return: logger
+        """
+        logfile = os.path.join(self._appdir, 'logs/twittosphere.log')
+        logging.basicConfig(filename=logfile)
+        logger = logging.getLogger('twittosphere')
+        return logger
+
     def _get_db_conn(self):
         """
         Get a database session.
@@ -70,7 +88,6 @@ class TwittosphereApp(object):
         conn = SimpleDatabaseConnection(user=user, password=password,
                                         host=host, dbname=dbname)
         return conn
-
 
     def _get_configs(self):
         """
