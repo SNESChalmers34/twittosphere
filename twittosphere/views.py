@@ -69,6 +69,7 @@ class ProjectView(GenericView):
         project = Project(name=name, description=description)
         session.add(project)
         session.commit()
+        session.close()
         return "Success"
 
 
