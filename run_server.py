@@ -16,4 +16,5 @@ if __name__ == '__main__':
             'tools.staticdir.dir': staticpath
         }
     }
+    # starting server
     cherrypy.quickstart(TwittosphereApp(), config=config)
