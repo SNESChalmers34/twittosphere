@@ -6,19 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{% block title %}{% endblock %}</title>
-    <!-- Block for extra css includes -->
-    <link href="/static/css/base.css" rel="stylesheet">
-    {% block extra_css %}
-    {% endblock %}
+
     <!-- Bootstrap -->
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <!-- DataTables -->
     <link rel="stylesheet" type="text/css" href="/static/DataTables/datatables.min.css"/>
+
+    <!-- Block for extra css includes -->
+    <link href="/static/css/base.css" rel="stylesheet">
+    {% block extra_css %}
+    {% endblock %}
+
   </head>
   <body>
 
-    {% block extra_js %}
-    {% endblock %}
+
     <!-- Navigation bar -->
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container-fluid">
@@ -38,8 +40,6 @@
         
     </div>
 
-    {% block content %}
-    {% endblock %}
 
     <!-- Footer -->
     <footer>
@@ -51,7 +51,8 @@
     </footer>
     <!-- Content block -->
 
-
+    {% block content %}
+    {% endblock %}
 
 
     <!-- Javascript includes here -->
@@ -59,5 +60,7 @@
     <script src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/DataTables/datatables.min.js"></script>
     <!-- Extra javascript includes here -->
+    {% block extra_js %}
+    {% endblock %}
   </body>
 </html>
